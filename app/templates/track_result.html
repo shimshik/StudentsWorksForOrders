@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результат отслеживания — MajorLogistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Шапка (такая же как на главной) */
+        header {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 15px 0;
+            border-bottom: 1px solid #4dd0e1;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #006064;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00838f;
+        }
+
+        /* Основной контент */
+        main {
+            flex: 1;
+            padding: 60px 0;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0f7fa;
+        }
+
+        .result-header h2 {
+            color: #006064;
+            font-size: 1.8rem;
+        }
+
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Цвета статусов */
+        .status-created {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-in-transit {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-delivered {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .status-default {
+            background: #f5f5f5;
+            color: #757575;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4dd0e1;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #006064;
+            word-break: break-word;
+        }
+
+        .update-time {
+            background: #e0f7fa;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #006064;
+        }
+
+        .update-time svg {
+            width: 20px;
+            height: 20px;
+            fill: #006064;
+            flex-shrink: 0;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .not-found svg {
+            width: 80px;
+            height: 80px;
+            fill: #b0bec5;
+            margin-bottom: 20px;
+        }
+
+        .not-found p {
+            font-size: 1.2rem;
+            color: #546e7a;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #006064;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .back-link:hover {
+            background: #00838f;
+        }
+
+        .back-link.secondary {
+            background: #e0f7fa;
+            color: #006064;
+        }
+
+        .back-link.secondary:hover {
+            background: #b2ebf2;
+        }
+
+        /* Футер */
+        footer {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid #4dd0e1;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #006064;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .result-card {
+                padding: 25px;
+            }
+
+            .result-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/static/images/3.png" alt="MajorLogistics">
+            </div>
+            <nav>
+                <a href="{{ url_for('main.index') }}#about">О нас</a>
+                <a href="{{ url_for('main.index') }}#gallery">Кейсы</a>
+                <a href="/offices">Офисы</a>
+                <a href="/contact">Оставить заявку</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            {% if shipment %}
+            <div class="result-card">
+                <div class="result-header">
+                    <h2>Груз #{{ shipment.tracking_number }}</h2>
+                    {% set status_class = 'status-default' %}
+                    {% if shipment.status %}
+                        {% if 'создан' in shipment.status.lower() %}
+                            {% set status_class = 'status-created' %}
+                        {% elif 'пути' in shipment.status.lower() or 'транзит' in shipment.status.lower() %}
+                            {% set status_class = 'status-in-transit' %}
+                        {% elif 'доставлен' in shipment.status.lower() %}
+                            {% set status_class = 'status-delivered' %}
+                        {% endif %}
+                    {% endif %}
+                    <span class="status-badge {{ status_class }}">{{ shipment.status }}</span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Откуда</div>
+                        <div class="info-value">{{ shipment.origin }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Куда</div>
+                        <div class="info-value">{{ shipment.destination }}</div>
+                    </div>
+                </div>
+
+                {% if shipment.last_update %}
+                <div class="update-time">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.1.8-1.2-4.5-2.7V7z"/>
+                    </svg>
+                    <span>Последнее обновление: {{ shipment.last_update }}</span>
+                </div>
+                {% endif %}
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="{{ url_for('main.index') }}" class="back-link">На главную</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="not-found">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <p>Груз с номером <strong>"{{ request.form.get('tracking_number', '') }}"</strong> не найден</p>
+                <a href="{{ url_for('main.index') }}" class="back-link secondary">Попробовать снова</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2024 MajorLogistics — грузоперевозки по России</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

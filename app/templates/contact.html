@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оставить заявку — MajorLogistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Шапка */
+        header {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 15px 0;
+            border-bottom: 1px solid #4dd0e1;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #006064;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00838f;
+        }
+
+        /* Основной контент */
+        main {
+            padding: 60px 0;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: #006064;
+            margin-bottom: 15px;
+        }
+
+        .page-title p {
+            color: #546e7a;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Контактная информация */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Форма */
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .contact-form h2 {
+            color: #006064;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4dd0e1;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-submit {
+            background: #4dd0e1;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background: #26c6da;
+        }
+
+        /* Контактная информация */
+        .contact-info {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .contact-info h2 {
+            color: #006064;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+            color: #546e7a;
+        }
+
+        .info-item svg {
+            width: 24px;
+            height: 24px;
+            fill: #4dd0e1;
+            flex-shrink: 0;
+        }
+
+        .info-item h3 {
+            color: #006064;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .info-item a {
+            color: #00838f;
+            text-decoration: none;
+        }
+
+        .info-item a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #e0f7fa;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .social-link:hover {
+            background: #4dd0e1;
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: #006064;
+        }
+
+        .social-link:hover svg {
+            fill: white;
+        }
+
+        /* Success message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-top: 40px;
+        }
+
+        .faq-section h2 {
+            color: #006064;
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .faq-item h3 {
+            color: #006064;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .faq-item p {
+            color: #546e7a;
+        }
+
+        /* Футер */
+        footer {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid #4dd0e1;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #006064;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .contact-form, .contact-info {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/static/images/3.png" alt="MajorLogistics">
+            </div>
+            <nav>
+                <a href="{{ url_for('main.about') }}">О нас</a>
+                <a href="{{ url_for('main.cases') }}">Кейсы</a>
+                <a href="{{ url_for('main.offices') }}">Офисы</a>
+                <a href="{{ url_for('main.contact') }}">Оставить заявку</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>Свяжитесь с нами</h1>
+                <p>Ответим на любые вопросы и рассчитаем стоимость перевозки</p>
+            </div>
+
+            {% if success %}
+            <div class="success-message">
+                <h3>✅ Спасибо за заявку!</h3>
+                <p>Мы свяжемся с вами в ближайшее время.</p>
+            </div>
+            {% endif %}
+
+            <div class="contact-grid">
+                <!-- Форма -->
+                <div class="contact-form">
+                    <h2>Оставить заявку</h2>
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="name">Ваше имя *</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Телефон *</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Сообщение *</label>
+                            <textarea id="message" name="message" class="form-control" placeholder="Опишите вашу задачу" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Отправить заявку</button>
+                    </form>
+                </div>
+
+                <!-- Контакты -->
+                <div class="contact-info">
+                    <h2>Контакты</h2>
+
+                    <div class="info-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                        </svg>
+                        <div>
+                            <h3>Главный офис</h3>
+                            <p>г. Москва, ул. Логистическая, д. 1</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <div>
+                            <h3>Email</h3>
+                            <p><a href="mailto:info@majorlogistics.ru">info@majorlogistics.ru</a></p>
+                            <p><a href="mailto:sales@majorlogistics.ru">sales@majorlogistics.ru</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        <div>
+                            <h3>Телефоны</h3>
+                            <p>Отдел продаж: <a href="tel:+74951234567">+7 111 111 11 11</a></p>
+                            <p>Поддержка: <a href="tel:+74957654321">+7 111 111 11 11</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.1.8-1.2-4.5-2.7V7z"/>
+                        </svg>
+                        <div>
+                            <h3>Режим работы</h3>
+                            <p>Пн-Пт: 9:00 - 20:00</p>
+                            <p>Сб: 10:00 - 16:00</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.8c4.56-.93 8-4.96 8-9.8z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22 6c-.77.35-1.6.58-2.47.68.9-.54 1.6-1.38 1.92-2.4-.83.5-1.75.85-2.72 1.05C18.38 4.7 17.27 4 16 4c-2.35 0-4.27 1.92-4.27 4.3 0 .34.04.67.1.99-3.54-.18-6.7-1.88-8.8-4.47-.37.63-.58 1.37-.58 2.15 0 1.5.75 2.8 1.92 3.6-.7-.02-1.36-.22-1.94-.55v.05c0 2.07 1.47 3.8 3.44 4.2-.36.1-.74.15-1.13.15-.28 0-.55-.03-.82-.07.55 1.7 2.14 2.95 4.02 2.98-1.48 1.16-3.33 1.85-5.35 1.85-.35 0-.68-.02-1.02-.06 1.9 1.22 4.16 1.93 6.6 1.93 7.92 0 12.25-6.57 12.25-12.27 0-.18-.01-.37-.02-.55.85-.6 1.6-1.36 2.2-2.22z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M21 13v6c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h6v2H5v14h14v-6h2zM15 4v2h3.59l-9.83 9.83 1.41 1.41L20 7.41V11h2V4h-7z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="faq-section">
+                <h2>Часто задаваемые вопросы</h2>
+                <div class="faq-item">
+                    <h3>Как быстро вы отвечаете на заявки?</h3>
+                    <p>Мы обрабатываем все заявки в течение 15 минут в рабочее время. Если заявка поступила после 20:00, мы свяжемся с вами на следующее утро.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Нужно ли предоплата?</h3>
+                    <p>Мы работаем по 100% предоплате для новых клиентов. Для постоянных клиентов возможны индивидуальные условия оплаты.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Можно ли отслеживать груз?</h3>
+                    <p>Да, мы предоставляем доступ к системе онлайн-мониторинга для всех клиентов. Вы сможете видеть местоположение груза в реальном времени.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>С какими грузами вы работаете?</h3>
+                    <p>Мы перевозим любые грузы, кроме опасных и запрещенных. Работаем со сборными грузами, негабаритом, техникой, продуктами питания и т.д.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2024 MajorLogistics — ваш надежный партнер в логистике</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

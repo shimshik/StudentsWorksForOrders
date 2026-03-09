@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кейсы — MajorLogistics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Шапка */
+        header {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 15px 0;
+            border-bottom: 1px solid #4dd0e1;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #006064;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00838f;
+        }
+
+        /* Основной контент */
+        main {
+            padding: 60px 0;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: #006064;
+            margin-bottom: 15px;
+        }
+
+        .page-title p {
+            color: #546e7a;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Фильтры кейсов */
+        .case-filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid #4dd0e1;
+            background: transparent;
+            color: #006064;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4dd0e1;
+            color: white;
+        }
+
+        /* Сетка кейсов */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .case-image {
+            height: 200px;
+            background: linear-gradient(135deg, #4dd0e1, #26c6da);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .case-content {
+            padding: 25px;
+        }
+
+        .case-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #e0f7fa;
+            color: #006064;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .case-content h3 {
+            font-size: 1.3rem;
+            color: #006064;
+            margin-bottom: 10px;
+        }
+
+        .case-desc {
+            color: #546e7a;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .case-meta {
+            display: flex;
+            gap: 20px;
+            color: #78909c;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .case-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .case-meta svg {
+            width: 18px;
+            height: 18px;
+            fill: #4dd0e1;
+        }
+
+        .case-link {
+            color: #00838f;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s;
+        }
+
+        .case-link:hover {
+            gap: 10px;
+        }
+
+        /* Футер */
+        footer {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid #4dd0e1;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #006064;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/static/images/3.png" alt="MajorLogistics">
+            </div>
+            <nav>
+                <a href="{{ url_for('main.about') }}">О нас</a>
+                <a href="{{ url_for('main.cases') }}">Кейсы</a>
+                <a href="{{ url_for('main.offices') }}">Офисы</a>
+                <a href="{{ url_for('main.contact') }}">Оставить заявку</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>Наши проекты</h1>
+                <p>Реальные кейсы успешных перевозок</p>
+            </div>
+
+
+            <div class="cases-grid">
+                <!-- Кейс 1 -->
+                <div class="case-card">
+                    <div class="case-image">🚚</div>
+                    <div class="case-content">
+                        <span class="case-category">Автоперевозки</span>
+                        <h3>Доставка оборудования для завода</h3>
+                        <p class="case-desc">Перевезли 20 тонн промышленного оборудования из Москвы в Новосибирск за 4 дня.</p>
+                        <div class="case-meta">
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                </svg>
+                                Москва → Новосибирск
+                            </span>
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
+                                </svg>
+                                2024
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Кейс 2 -->
+                <div class="case-card">
+                    <div class="case-image">🚂</div>
+                    <div class="case-content">
+                        <span class="case-category">Ж/Д перевозки</span>
+                        <h3>Перевозка зерна в Китай</h3>
+                        <p class="case-desc">Организовали поставку 5000 тонн зерна из Краснодара в Китай через погранпереход.</p>
+                        <div class="case-meta">
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                </svg>
+                                Краснодар → Китай
+                            </span>
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
+                                </svg>
+                                2023
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Кейс 3 -->
+                <div class="case-card">
+                    <div class="case-image">📦</div>
+                    <div class="case-content">
+                        <span class="case-category">Сборные грузы</span>
+                        <h3>Консолидация грузов из Европы</h3>
+                        <p class="case-desc">Собрали грузы от 15 поставщиков в одном контейнере и доставили в Москву.</p>
+                        <div class="case-meta">
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                </svg>
+                                Европа → Москва
+                            </span>
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
+                                </svg>
+                                2024
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Кейс 4 -->
+                <div class="case-card">
+                    <div class="case-image">⛴️</div>
+                    <div class="case-content">
+                        <span class="case-category">Морские перевозки</span>
+                        <h3>Доставка техники из Южной Кореи</h3>
+                        <p class="case-desc">Организовали морскую перевозку 40-футовых контейнеров с техникой во Владивосток.</p>
+                        <div class="case-meta">
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                </svg>
+                                Корея → Владивосток
+                            </span>
+                            <span>
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
+                                </svg>
+                                2023
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2024 MajorLogistics — ваш надежный партнер в логистике</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

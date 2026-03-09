@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления — MajorLogistics Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Шапка админки */
+        .admin-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .admin-nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .admin-nav a:hover {
+            color: white;
+            border-bottom-color: #3498db;
+        }
+
+        .admin-nav a.active {
+            border-bottom-color: #3498db;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Основной контент */
+        main {
+            padding: 40px 0;
+        }
+
+        .page-title {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+
+        .add-btn {
+            background: #27ae60;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #2ecc71;
+        }
+
+        .add-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* Панель фильтров */
+        .filters-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .filters-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .filters-title svg {
+            width: 24px;
+            height: 24px;
+            fill: #3498db;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-input {
+            padding: 10px 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .filter-select {
+            padding: 10px 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .btn-filter {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-filter:hover {
+            background: #2980b9;
+        }
+
+        .btn-reset {
+            padding: 10px 20px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-reset:hover {
+            background: #7f8c8d;
+        }
+
+        .active-filters {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .filter-tag svg {
+            width: 16px;
+            height: 16px;
+            fill: #1976d2;
+        }
+
+        /* Flash сообщения */
+        .flash-messages {
+            margin-bottom: 30px;
+        }
+
+        .flash-message {
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .flash-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        /* Таблица */
+        .table-wrapper {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Статусы в таблице */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-transit {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-delivered {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .date-cell {
+            white-space: nowrap;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Действия с грузом */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn {
+            padding: 6px 12px;
+            background: #f39c12;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .edit-btn:hover {
+            background: #e67e22;
+        }
+
+        .delete-btn {
+            padding: 6px 12px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Счетчик результатов */
+        .results-count {
+            margin: 20px 0;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        .results-count strong {
+            color: #2c3e50;
+        }
+
+        /* Пустая таблица */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            fill: #bdc3c7;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* Адаптация */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .admin-nav {
+                justify-content: center;
+            }
+
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-filter, .btn-reset {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container header-content">
+            <div class="logo">
+                Major<span>Logistics</span> Admin
+            </div>
+            <nav class="admin-nav">
+                <a href="{{ url_for('admin.dashboard') }}" class="active">Дашборд</a>
+                <a href="{{ url_for('admin.contact_requests') }}">Заявки</a>
+                <a href="{{ url_for('admin.add_shipment') }}">Добавить груз</a>
+            </nav>
+            <div class="user-info">
+                <span>Администратор</span>
+                <a href="{{ url_for('admin.logout') }}" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>📦 Управление грузами</h1>
+                <a href="{{ url_for('admin.add_shipment') }}" class="add-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    Добавить новый груз
+                </a>
+            </div>
+
+            <!-- Flash сообщения -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                {{ message }}
+                                <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Панель фильтров -->
+            <div class="filters-panel">
+                <div class="filters-title">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 6h16v2H4zm2 4h12v2H6zm3 4h6v2H9z"/>
+                    </svg>
+                    <span>Фильтры</span>
+                </div>
+
+                <form method="GET" action="{{ url_for('admin.dashboard') }}">
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <label>Трек-номер</label>
+                            <input type="text" name="tracking" class="filter-input" placeholder="Например: TRK-001" value="{{ request.args.get('tracking', '') }}">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Откуда</label>
+                            <input type="text" name="origin" class="filter-input" placeholder="Город отправления" value="{{ request.args.get('origin', '') }}">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Куда</label>
+                            <input type="text" name="destination" class="filter-input" placeholder="Город назначения" value="{{ request.args.get('destination', '') }}">
+                        </div>
+
+                        <div class="filter-group">
+                            <label>Статус</label>
+                            <select name="status" class="filter-select">
+                                <option value="">Все статусы</option>
+                                <option value="pending" {% if request.args.get('status') == 'pending' %}selected{% endif %}>⏳ В ожидании</option>
+                                <option value="in_transit" {% if request.args.get('status') == 'in_transit' %}selected{% endif %}>🚚 В пути</option>
+                                <option value="delivered" {% if request.args.get('status') == 'delivered' %}selected{% endif %}>✅ Доставлено</option>
+                                <option value="cancelled" {% if request.args.get('status') == 'cancelled' %}selected{% endif %}>❌ Отменено</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-actions">
+                            <button type="submit" class="btn-filter">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
+                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                </svg>
+                                Применить
+                            </button>
+                            <a href="{{ url_for('admin.dashboard') }}" class="btn-reset">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
+                                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                                </svg>
+                                Сбросить
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Активные фильтры -->
+                    {% set has_filters = request.args.get('tracking') or request.args.get('origin') or request.args.get('destination') or request.args.get('status') %}
+                    {% if has_filters %}
+                    <div class="active-filters">
+                        <span style="color: #7f8c8d; font-size: 0.9rem;">Активные фильтры:</span>
+                        {% if request.args.get('tracking') %}
+                        <span class="filter-tag">
+                            <svg viewBox="0 0 24 24" width="14" height="14">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Трек: {{ request.args.get('tracking') }}
+                        </span>
+                        {% endif %}
+                        {% if request.args.get('origin') %}
+                        <span class="filter-tag">
+                            <svg viewBox="0 0 24 24" width="14" height="14">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            Откуда: {{ request.args.get('origin') }}
+                        </span>
+                        {% endif %}
+                        {% if request.args.get('destination') %}
+                        <span class="filter-tag">
+                            <svg viewBox="0 0 24 24" width="14" height="14">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            Куда: {{ request.args.get('destination') }}
+                        </span>
+                        {% endif %}
+                        {% if request.args.get('status') %}
+                        <span class="filter-tag">
+                            <svg viewBox="0 0 24 24" width="14" height="14">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Статус:
+                            {% if request.args.get('status') == 'pending' %}⏳ В ожидании
+                            {% elif request.args.get('status') == 'in_transit' %}🚚 В пути
+                            {% elif request.args.get('status') == 'delivered' %}✅ Доставлено
+                            {% elif request.args.get('status') == 'cancelled' %}❌ Отменено
+                            {% else %}{{ request.args.get('status') }}
+                            {% endif %}
+                        </span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+
+            {% if shipments %}
+            <!-- Счетчик результатов -->
+            <div class="results-count">
+                Найдено <strong>{{ shipments|length }}</strong> груз(ов/а)
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Трек-номер</th>
+                            <th>Откуда</th>
+                            <th>Куда</th>
+                            <th>Статус</th>
+                            <th>Последнее обновление</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for shipment in shipments %}
+                        <tr>
+                            <td><strong>#{{ shipment.id }}</strong></td>
+                            <td><code>{{ shipment.tracking_number }}</code></td>
+                            <td>{{ shipment.origin }}</td>
+                            <td>{{ shipment.destination }}</td>
+                            <td>
+                                {% if shipment.status == 'pending' %}
+                                    <span class="status-badge status-pending">⏳ В ожидании</span>
+                                {% elif shipment.status == 'in_transit' %}
+                                    <span class="status-badge status-transit">🚚 В пути</span>
+                                {% elif shipment.status == 'delivered' %}
+                                    <span class="status-badge status-delivered">✅ Доставлено</span>
+                                {% elif shipment.status == 'cancelled' %}
+                                    <span class="status-badge status-cancelled">❌ Отменено</span>
+                                {% else %}
+                                    <span class="status-badge">{{ shipment.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="date-cell">{{ shipment.last_update }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{{ url_for('admin.update_shipment', shipment_id=shipment.id) }}" class="edit-btn">✎ Редактировать</a>
+                                    <form action="{{ url_for('admin.delete_shipment', shipment_id=shipment.id) }}" method="POST" onsubmit="return confirm('Точно удалить груз {{ shipment.tracking_number }}?')">
+                                        <button type="submit" class="delete-btn">✕ Удалить</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8z"/>
+                </svg>
+                <p>Грузы не найдены</p>
+                <a href="{{ url_for('admin.add_shipment') }}" class="add-btn">Добавить первый груз</a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

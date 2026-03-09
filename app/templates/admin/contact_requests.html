@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявки — MajorLogistics Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .admin-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .admin-nav a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            border-bottom-color: #3498db;
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .page-title {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+        }
+
+        .stats-badge {
+            background: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .flash-messages {
+            margin-bottom: 30px;
+        }
+
+        .flash-message {
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+            padding: 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-new {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-progress {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .message-preview {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #546e7a;
+        }
+
+        .status-form {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-select {
+            padding: 5px 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        .update-btn {
+            padding: 5px 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #2980b9;
+        }
+
+        .date-cell {
+            white-space: nowrap;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            fill: #bdc3c7;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .admin-nav {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container header-content">
+            <div class="logo">
+                Major<span>Logistics</span> Admin
+            </div>
+            <nav class="admin-nav">
+                <a href="{{ url_for('admin.dashboard') }}">Грузы</a>
+                <a href="{{ url_for('admin.contact_requests') }}" class="active">Заявки</a>
+                <a href="{{ url_for('admin.add_shipment') }}">Добавить груз</a>
+            </nav>
+            <div class="user-info">
+                <span>Администратор</span>
+                <a href="{{ url_for('admin.logout') }}" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="page-title">
+                <h1>📬 Заявки с сайта</h1>
+                <span class="stats-badge">Всего: {{ requests|length }}</span>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% if requests %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Дата</th>
+                            <th>Имя</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Сообщение</th>
+                            <th>Статус</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in requests %}
+                        <tr>
+                            <td><strong>#{{ req.id }}</strong></td>
+                            <td class="date-cell">{{ req.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                            <td>{{ req.name }}</td>
+                            <td><a href="mailto:{{ req.email }}">{{ req.email }}</a></td>
+                            <td><a href="tel:{{ req.phone }}">{{ req.phone }}</a></td>
+                            <td class="message-preview" title="{{ req.message }}">{{ req.message }}</td>
+                            <td>
+                                {% if req.status == 'new' %}
+                                    <span class="status-badge status-new">🆕 Новая</span>
+                                {% elif req.status == 'in_progress' %}
+                                    <span class="status-badge status-progress">⚙️ В работе</span>
+                                {% elif req.status == 'completed' %}
+                                    <span class="status-badge status-completed">✅ Завершена</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form action="{{ url_for('admin.update_request_status', request_id=req.id) }}" method="POST" class="status-form">
+                                    <select name="status" class="status-select">
+                                        <option value="new" {% if req.status == 'new' %}selected{% endif %}>Новая</option>
+                                        <option value="in_progress" {% if req.status == 'in_progress' %}selected{% endif %}>В работе</option>
+                                        <option value="completed" {% if req.status == 'completed' %}selected{% endif %}>Завершена</option>
+                                    </select>
+                                    <button type="submit" class="update-btn">Обновить</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6z"/>
+                </svg>
+                <p>Пока нет ни одной заявки</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>
